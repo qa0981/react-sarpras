@@ -34,7 +34,7 @@ export default function Register() {
 
   return (
     <AuthLayout title="Register">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="grid w-full max-w-sm grid-cols-1 gap-8">
         <input
           type="text"
           placeholder="Nama"
