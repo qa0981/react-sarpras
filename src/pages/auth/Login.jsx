@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthLayout from "../layouts/AuthLayout";
-import api from "../services/api";
+import AuthLayout from "../../layouts/AuthLayout";
+import api from "../../services/api";
 
 export default function Login() {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,11 +15,31 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await api.post("/login", { email, password });
+      const res = await api.post("/login", {
+        email,
+        password,
+      });
+
+      // =========================
+      // SIMPAN AUTH DATA
+      // =========================
       localStorage.setItem("token", res.data.token);
-      navigate("/");
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("role", res.data.user.role);
+
+      // =========================
+      // REDIRECT BERDASARKAN ROLE
+      // =========================
+      if (res.data.user.role === "admin") {
+        navigate("/sarpras/dashboard");
+      } else {
+        navigate("/pengaduan/pengaduan");
+      }
+
     } catch (err) {
-      alert("Email atau password salah");
+      alert(
+        err.response?.data?.message || "Email atau password salah"
+      );
     } finally {
       setLoading(false);
     }
@@ -33,6 +54,7 @@ export default function Login() {
             type="email"
             className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             placeholder="email@example.com"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -44,6 +66,7 @@ export default function Login() {
             type="password"
             className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             placeholder="••••••••"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
@@ -59,7 +82,10 @@ export default function Login() {
 
         <p className="text-center text-sm text-gray-600">
           Belum punya akun?{" "}
-          <Link to="/register" className="text-blue-600 font-medium hover:underline">
+          <Link
+            to="/register"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Register
           </Link>
         </p>

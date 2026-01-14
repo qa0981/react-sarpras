@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 
-export default function Sidebar() {
+export default function SidebarAdmin() {
   const location = useLocation();
 
   const menu = [

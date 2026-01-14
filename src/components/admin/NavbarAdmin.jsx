@@ -1,6 +1,6 @@
 import NotificationBadge from "./NotificationBadge";
 
-export default function Navbar() {
+export default function NavbarAdmin() {
   return (
     <nav className="navbar navbar-dark bg-danger px-3 d-flex justify-content-between">
       <span className="navbar-brand">
