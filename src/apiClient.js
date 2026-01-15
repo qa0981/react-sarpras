@@ -22,7 +22,6 @@ export async function apiRequest(path, options = {}) {
   return data;
 }
 
-// Helper untuk request dengan token (todos, logout, dll.)
 export async function apiAuthRequest(path, token, options = {}) {
   const url = `${API_BASE_URL}${path}`;
 

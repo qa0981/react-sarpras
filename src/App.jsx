@@ -1,7 +1,17 @@
+<<<<<<< Updated upstream
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+=======
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Pengaduan from "./pages/pengaduan/PengaduanPage";
+import Sarpras from "./pages/sarpras/SarprasPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+>>>>>>> Stashed changes
 import NotFound from "./pages/NotFound";
 
 import AdminLayout from "./layouts/AdminLayout";
@@ -40,6 +50,7 @@ export default function App() {
           {/* default admin page */}
           <Route index element={<Navigate to="dashboard" />} />
 
+<<<<<<< Updated upstream
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="sarpras" element={<SarprasList />} />
           <Route path="sarpras/create" element={<SarprasForm />} />
@@ -69,5 +80,27 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+=======
+      <Route
+        path="/pengaduan"
+        element={
+          <ProtectedRoute>
+            <Pengaduan />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sarpras"
+        element={
+          <ProtectedRoute>
+            <Sarpras />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+>>>>>>> Stashed changes
   );
 }
