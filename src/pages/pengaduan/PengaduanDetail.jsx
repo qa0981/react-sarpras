@@ -1,69 +1,56 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
-export default function PengaduanDetail() {
+export default function PengaduanDetailUser() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .get(`/pengaduan/${id}`)
-      .then((res) => setData(res.data))
-      .catch(() => alert("Gagal mengambil detail pengaduan"))
-      .finally(() => setLoading(false));
+    api.get(`/pengaduan/${id}`)
+      .then(res => setData(res.data))
+      .catch(() => alert("Gagal mengambil detail pengaduan"));
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!data) return <p>Data tidak ditemukan</p>;
+  if (!data) return <p>Loading...</p>;
 
   return (
-    <div className="max-w-xl">
-      <Link
-        to="/user/pengaduan"
-        className="text-blue-600 text-sm"
+    <div className="max-w-xl bg-white rounded-xl shadow p-6">
+      <button
+        onClick={() => navigate(-1)}
+        className="text-blue-600 text-sm mb-4 hover:underline"
       >
         ← Kembali
-      </Link>
+      </button>
 
-      <h2 className="text-xl font-bold mt-2 mb-4">
-        Detail Pengaduan
-      </h2>
+      <h2 className="text-2xl font-bold mb-4">Detail Pengaduan</h2>
 
-      <div className="space-y-2">
-        <p>
-          <b>Judul:</b> {data.judul}
-        </p>
-        <p>
-          <b>Sarpras:</b>{" "}
-          {data.sarpras?.barang} -{" "}
-          {data.sarpras?.lokasi}
-        </p>
+      <div className="space-y-3 text-sm">
+        <p><b>User:</b> {data.user?.name}</p>
+        <p><b>Sarpras:</b> {data.namabarang} ({data.kodebarang})</p>
+
         <p>
           <b>Status:</b>{" "}
-          <span className="font-semibold">
+          <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700">
             {data.status}
           </span>
         </p>
-        <p>
-          <b>Isi:</b>
-        </p>
-        <p className="border p-3 rounded bg-gray-50">
-          {data.isi}
-        </p>
 
-        {/* FEEDBACK ADMIN */}
+        <div>
+          <b>Isi Pengaduan:</b>
+          <div className="mt-1 border rounded p-3 bg-gray-50">
+            {data.keterangan}
+          </div>
+        </div>
+
         {data.feedback && (
-          <>
-            <p className="mt-4">
-              <b>Feedback Admin:</b>
-            </p>
-            <div className="border p-3 rounded bg-green-50">
+          <div>
+            <b>Feedback Admin:</b>
+            <div className="mt-1 border rounded p-3 bg-green-50">
               {data.feedback}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

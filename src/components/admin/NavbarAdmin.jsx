@@ -1,18 +1,9 @@
-import NotificationBadge from "./NotificationBadge";
-
 export default function NavbarAdmin() {
   return (
-    <nav className="navbar navbar-dark bg-danger px-3 d-flex justify-content-between">
-      <span className="navbar-brand">
+    <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
+      <h1 className="text-2xl font-bold text-gray-800">
         Sistem Pengaduan Sarpras
-      </span>
-
-      <div className="d-flex align-items-center">
-        <NotificationBadge />
-        <button className="btn btn-outline-light btn-sm">
-          Sign out
-        </button>
-      </div>
-    </nav>
+      </h1>
+    </header>
   );
 }

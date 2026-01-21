@@ -31,9 +31,9 @@ export default function Login() {
       // REDIRECT BERDASARKAN ROLE
       // =========================
       if (res.data.user.role === "admin") {
-        navigate("/sarpras/dashboard");
+        navigate("/admin/dashboard");
       } else {
-        navigate("/pengaduan/pengaduan");
+        navigate("/user/pengaduan");
       }
 
     } catch (err) {

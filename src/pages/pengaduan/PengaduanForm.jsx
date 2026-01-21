@@ -6,15 +6,10 @@ export default function PengaduanForm() {
   const navigate = useNavigate();
 
   const [sarpras, setSarpras] = useState([]);
-  const [form, setForm] = useState({
-    sarpras_id: "",
-    judul: "",
-    isi: "",
-  });
-
+  const [idbarang, setIdbarang] = useState("");
+  const [keterangan, setKeterangan] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Ambil data sarpras
   useEffect(() => {
     api
       .get("/sarpras")
@@ -22,22 +17,20 @@ export default function PengaduanForm() {
       .catch(() => alert("Gagal mengambil data sarpras"));
   }, []);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await api.post("/pengaduan", form);
+      await api.post("/pengaduan", {
+        idbarang,
+        keterangan,
+      });
+
       alert("Pengaduan berhasil dikirim");
       navigate("/user/pengaduan");
-    } catch {
+    } catch (err) {
+      console.error(err.response?.data);
       alert("Gagal mengirim pengaduan");
     } finally {
       setLoading(false);
@@ -45,22 +38,21 @@ export default function PengaduanForm() {
   };
 
   return (
-    <div className="max-w-xl">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="max-w-xl bg-white rounded-2xl shadow-lg p-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
         Buat Pengaduan
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* SARPRAS */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium text-gray-600 mb-1">
             Sarpras
           </label>
           <select
-            name="sarpras_id"
-            value={form.sarpras_id}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            value={idbarang}
+            onChange={(e) => setIdbarang(e.target.value)}
+            className="w-full border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
             required
           >
             <option value="">-- Pilih Sarpras --</option>
@@ -72,45 +64,41 @@ export default function PengaduanForm() {
           </select>
         </div>
 
-        {/* JUDUL */}
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Judul Pengaduan
-          </label>
-          <input
-            type="text"
-            name="judul"
-            value={form.judul}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-            placeholder="Contoh: Kursi rusak"
-            required
-          />
-        </div>
-
         {/* ISI */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium text-gray-600 mb-1">
             Isi Pengaduan
           </label>
           <textarea
-            name="isi"
-            value={form.isi}
-            onChange={handleChange}
             rows="4"
-            className="w-full border px-3 py-2 rounded"
+            value={keterangan}
+            onChange={(e) => setKeterangan(e.target.value)}
+            className="w-full border px-3 py-2 rounded-xl focus:ring-2 focus:ring-blue-400 outline-none"
             placeholder="Jelaskan kerusakan atau masalah..."
             required
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-        >
-          {loading ? "Mengirim..." : "Kirim Pengaduan"}
-        </button>
+        {/* BUTTONS */}
+        <div className="flex gap-3 pt-2">
+          {/* KIRIM */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {loading ? "Mengirim..." : "Kirim Pengaduan"}
+          </button>
+
+          {/* KEMBALI */}
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex-1 bg-slate-200 text-slate-700 py-2.5 rounded-xl font-semibold hover:bg-slate-300 transition"
+          >
+            Kembali
+          </button>
+        </div>
       </form>
     </div>
   );

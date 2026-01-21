@@ -43,55 +43,70 @@ export default function PengaduanDetail() {
   if (!data) return <p>Data tidak ditemukan</p>;
 
   return (
-    <div className="max-w-xl">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="max-w-2xl bg-white rounded-xl shadow p-6">
+      {/* BACK */}
+      <button
+        onClick={() => navigate(-1)}
+        className="text-blue-600 mb-4 hover:underline"
+      >
+        ← Kembali
+      </button>
+
+      <h2 className="text-2xl font-bold mb-6">
         Detail Pengaduan
       </h2>
 
-      <div className="space-y-2 mb-4">
+      {/* INFO */}
+      <div className="space-y-3 mb-6 text-sm">
         <p>
-          <b>User:</b> {data.user?.name}
+          <b>User:</b>{" "}
+          {data.user?.name || "-"}
         </p>
+
         <p>
           <b>Sarpras:</b>{" "}
-          {data.sarpras?.barang} -{" "}
-          {data.sarpras?.lokasi}
+          {data.namabarang} ({data.kodebarang})
         </p>
+
         <p>
-          <b>Judul:</b> {data.judul}
+          <b>Status:</b>{" "}
+          <span className="font-semibold">
+            {data.status}
+          </span>
         </p>
-        <p>
-          <b>Isi:</b>
-        </p>
-        <div className="border p-3 rounded bg-gray-50">
-          {data.isi}
+
+        <div>
+          <b>Isi Pengaduan:</b>
+          <div className="mt-1 p-3 bg-gray-50 border rounded-lg">
+            {data.keterangan}
+          </div>
         </div>
       </div>
 
       {/* FORM ADMIN */}
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium">
+          <label className="block text-sm font-medium mb-1">
             Status
           </label>
           <select
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded-lg"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option value="Pending">Pending</option>
+            <option value="Menunggu">Menunggu</option>
             <option value="Diproses">Diproses</option>
             <option value="Selesai">Selesai</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium">
+          <label className="block text-sm font-medium mb-1">
             Feedback Admin
           </label>
           <textarea
-            className="w-full border px-3 py-2 rounded"
             rows="4"
+            className="w-full border px-3 py-2 rounded-lg"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Tulis feedback untuk pelapor"
@@ -100,7 +115,7 @@ export default function PengaduanDetail() {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-700"
         >
           Simpan
         </button>

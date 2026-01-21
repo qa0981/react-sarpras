@@ -1,47 +1,64 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import api from "../services/api";
+import api from "../../services/api";
 
 export default function NotificationBadge() {
-  const [jumlah, setJumlah] = useState(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    loadNotif();
+    // contoh: ambil pengaduan user yang statusnya berubah
+    api
+      .get("/pengaduan")
+      .then((res) => {
+        // hitung pengaduan yang sudah diproses / selesai
+        const notif = res.data.filter(
+          (item) =>
+            item.status === "Diproses" ||
+            item.status === "Selesai"
+        );
+        setCount(notif.length);
+      })
+      .catch(() => {
+        setCount(0);
+      });
   }, []);
 
- const loadNotif = async () => {
-    try {
-      const res = await api.get("/pengaduan/notifikasi");
-      setJumlah(res.data.total_baru);
-    } catch (error) {
-      console.error("Gagal mengambil notifikasi", error);
-    }
-  };
+  if (count === 0) return null;
 
   return (
-    <Link to="/pengaduan/PengaduanPage" className="relative">
+    <div style={{ position: "relative", marginRight: 16 }}>
       {/* Icon lonceng */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="w-6 h-6 text-red-600"
-        fill="none"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
-        stroke="currentColor"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M15 17h5l-1.4-1.4A2 2 0 0118 14V11a6 6 0 00-12 0v3a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 01-6 0"
-        />
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
       </svg>
 
-      {/* Badge merah */}
-      {jumlah > 0 && (
-        <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-          {jumlah}
-        </span>
-      )}
-    </Link>
+      {/* Badge */}
+      <span
+        style={{
+          position: "absolute",
+          top: -6,
+          right: -6,
+          background: "#ef4444",
+          color: "#fff",
+          fontSize: 11,
+          fontWeight: 700,
+          padding: "2px 6px",
+          borderRadius: "999px",
+          lineHeight: 1,
+        }}
+      >
+        {count}
+      </span>
+    </div>
   );
 }
